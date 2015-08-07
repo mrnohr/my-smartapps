@@ -14,13 +14,13 @@
  *
  */
 definition(
-    name: "Humidity Checker",
-    namespace: "mrnohr",
-    author: "Matt Nohr",
-    description: "Compare the humidity between rooms",
-    category: "My Apps",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")
+		name: "Humidity Checker",
+		namespace: "mrnohr",
+		author: "Matt Nohr",
+		description: "Compare the humidity between rooms",
+		category: "My Apps",
+		iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
+		iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience@2x.png")
 
 /**
  * In the In the virtual SmartApp Workshop on 8/6/14, a request was made to make an app that monitors humidity between
@@ -32,15 +32,15 @@ preferences {
 	section("When the humidity in this here...") {
 		input "monitoredRoom", "capability.relativeHumidityMeasurement"
 	}
-    section("Is higher than this room...") {
-    	input "baseRoom", "capability.relativeHumidityMeasurement"
-    }
-    section("By this amount...") {
-    	input "percentageDifferance", "number", title: "Percentage difference", defaultValue: 10
-    }
-    section("Turn on this switch...") {
-    	input "switch1", "capability.switch"
-    }
+	section("Is higher than this room...") {
+		input "baseRoom", "capability.relativeHumidityMeasurement"
+	}
+	section("By this amount...") {
+		input "percentageDifferance", "number", title: "Percentage difference", defaultValue: 10
+	}
+	section("Turn on this switch...") {
+		input "switch1", "capability.switch"
+	}
 }
 
 def installed() {
@@ -58,20 +58,20 @@ def updated() {
 
 def initialize() {
 	//Need to know anytime the humidity changes
-    subscribe(monitoredRoom, "humidity", "humidityHandler")
+	subscribe(monitoredRoom, "humidity", "humidityHandler")
 }
 
 def humidityHandler(evt) {
 	//get the humidity value for the event, which is for the "monitored" room
 	def monitoredValue = evt.value.toDouble()
 
-    //get the baseline humidity value for comparison
-    def baseValue = baseRoom.latestValue("humidity").toDouble()
+	//get the baseline humidity value for comparison
+	def baseValue = baseRoom.latestValue("humidity").toDouble()
 
-    log.info "Monitored value = $monitoredValue - base value = $baseValue - differance = $percentageDifferance"
+	log.info "Monitored value = $monitoredValue - base value = $baseValue - differance = $percentageDifferance"
 
-    //If the difference is higher than the allowed value, then turn on the switch
-    if((monitoredValue - baseValue) > percentageDifferance) {
-    	switch1.on()
-    }
+	//If the difference is higher than the allowed value, then turn on the switch
+	if((monitoredValue - baseValue) > percentageDifferance) {
+		switch1.on()
+	}
 }

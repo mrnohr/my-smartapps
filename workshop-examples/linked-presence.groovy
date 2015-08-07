@@ -14,13 +14,13 @@
  *
  */
 definition(
-    name: "Linked Presence",
-    namespace: "mrnohr",
-    author: "Matt Nohr",
-    description: "Send an alert of one presence sensor leaves without the other",
-    category: "My Apps",
-    iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/text_presence.png",
-    iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/text_presence@2x.png")
+		name: "Linked Presence",
+		namespace: "mrnohr",
+		author: "Matt Nohr",
+		description: "Send an alert of one presence sensor leaves without the other",
+		category: "My Apps",
+		iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/text_presence.png",
+		iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/text_presence@2x.png")
 
 /**
  * Based on the discussion here: http://community.smartthings.com/t/linking-presence-sensors-in-pairs-for-seniors/4915
@@ -36,13 +36,13 @@ preferences {
 	section("Presence Sensors") {
 		input "sensorDependant", "capability.presenceSensor", title: "When this person leaves alone"
 		input "sensorMain", "capability.presenceSensor", title: "Without this person"
-        input "timeDelay", "number", title: "With this delay (minutes)", default: 1
+		input "timeDelay", "number", title: "With this delay (minutes)", default: 1
 	}
-    section("Alerts") {
-    	input "switches", "capability.switch", title: "Turn on some lights?", required: false, multiple: true
-    	input "sendPushMessage", "enum", title: "Send a push notification?", options: ["Yes", "No"], required: false
+	section("Alerts") {
+		input "switches", "capability.switch", title: "Turn on some lights?", required: false, multiple: true
+		input "sendPushMessage", "enum", title: "Send a push notification?", options: ["Yes", "No"], required: false
 		input "phoneNumber", "phone", title: "Send a text message?", required: false
-    }
+	}
 }
 
 def installed() {
@@ -60,54 +60,54 @@ def updated() {
 }
 
 def initialize() {
-    subscribe(sensorDependant, "presence.not present", "leavingHandler")
+	subscribe(sensorDependant, "presence.not present", "leavingHandler")
 }
 
 //this will just handle scheduling/calling the checkOtherPresence method to handle the delay
 def leavingHandler(evt) {
 	if(timeDelay > 0) {
-    	log.debug "scheduling presence check for $timeDelay minute(s)"
-    	runIn(timeDelay * 60, "checkOtherPresence")
-    } else {
-    	checkOtherPresence()
-    }
+		log.debug "scheduling presence check for $timeDelay minute(s)"
+		runIn(timeDelay * 60, "checkOtherPresence")
+	} else {
+		checkOtherPresence()
+	}
 }
 
 def checkOtherPresence() {
 	log.debug "checking other presence sensor"
-    def dependantEvent = sensorDependant.latestState("presence")
+	def dependantEvent = sensorDependant.latestState("presence")
 
-    //first make sure the dependant is still away
-    if(dependantEvent.value == "not present") {
+	//first make sure the dependant is still away
+	if(dependantEvent.value == "not present") {
 		//make sure there is an event first, just in the rare case there are no events
-        def mainEvent = sensorMain.latestState("presence")
+		def mainEvent = sensorMain.latestState("presence")
 		if(mainEvent) {
 			//compare latest events from both devices
-            def eventTimeDifference = Math.abs(dependantEvent.date.time - mainEvent.date.time) / (1000*60) //minutes
-            def allowedTimeDifference = 1 //maybe use same timeDelay?
+			def eventTimeDifference = Math.abs(dependantEvent.date.time - mainEvent.date.time) / (1000 * 60) //minutes
+			def allowedTimeDifference = 1 //maybe use same timeDelay?
 
-            //make sure dependant left with main
-            if(mainEvent != "not present" || eventTimeDifference > allowedTimeDifference) {
-            	def message = "$sensorDependant left without $sensorMain"
-                log.warn message
-                send(message) // send push/text
-                switches.on() // turn on lights
-            }
-        } else {
-	        //this should only happen if sensorMain is brand new and has never had any events
-        	log.warn "$sensorDependant left but no events for $sensorMain"
-        }
-    }
+			//make sure dependant left with main
+			if(mainEvent != "not present" || eventTimeDifference > allowedTimeDifference) {
+				def message = "$sensorDependant left without $sensorMain"
+				log.warn message
+				send(message) // send push/text
+				switches.on() // turn on lights
+			}
+		} else {
+			//this should only happen if sensorMain is brand new and has never had any events
+			log.warn "$sensorDependant left but no events for $sensorMain"
+		}
+	}
 }
 
 private send(msg) {
-	if (sendPushMessage != "No") {
-    	log.debug "Sending push notification: $msg"
-		sendPush( msg )
+	if(sendPushMessage != "No") {
+		log.debug "Sending push notification: $msg"
+		sendPush(msg)
 	}
 
-	if (phoneNumber) {
-	    log.debug "Sending text notification: $msg"
+	if(phoneNumber) {
+		log.debug "Sending text notification: $msg"
 		sendSms(phoneNumber, msg)
 	}
 }

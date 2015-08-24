@@ -15,7 +15,7 @@
  */
 
 /**
- * This handles a specific case where not everyone leaves, which is typically what triggers a phrase to 
+ * This handles a specific case where not everyone leaves, which is typically what triggers a phrase to
  * execute, but also execute it at specific time when only 1 person leaves.
  */
 definition(
@@ -65,9 +65,9 @@ def initialize() {
 def lightHandler(evt) {
 	log.debug "$evt.name: $evt.value"
 	location.helloHome.execute(phrase)
-    
-    //turn back off the light
-    runIn(60*5, turnOffLight)   
+
+	//turn back off the light
+	runIn(60 * 5, turnOffLight)
 }
 
 def turnOffLight() {

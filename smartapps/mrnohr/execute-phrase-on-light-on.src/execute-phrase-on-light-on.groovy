@@ -34,7 +34,7 @@ preferences {
 
 def firstPage() {
 	dynamicPage(name: "firstPage", install: true, uninstall: true) {
-		section("Execute a phrase on departure") {
+		section("Execute a phrase when this switch turns on") {
 			input(name: "switch1", type: "capability.switch", title: "Which Switch")
 			input(name: "phrase", type: "enum", title: "Execute The Phrase", options: location.helloHome.getPhrases().label)
 		}

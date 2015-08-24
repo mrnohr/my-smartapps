@@ -15,6 +15,9 @@ Using a button device (like Aeon Minimote), and a dimmer switch, have 1 button t
 * **Dimmers Always Full**
 Any time a dimmeable light turns on or changes level, reset the level to 99
 
+* **Execute Phrase When a Light Turns Off**
+When a light turns off, execute a phrase
+
 * **Extra Phrase Execution**
 This handles a specific case where not everyone leaves, which is typically what triggers a phrase to
 execute, but also execute it at specific time when only 1 person leaves.

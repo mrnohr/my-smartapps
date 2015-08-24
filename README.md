@@ -30,3 +30,6 @@ Turns on lights when it gets dark, and off when it gets light. Uses an sensor fo
 
 * **Turn On Lights When A Door Opens After Sunset**
 When a door opens after sunset, turn on some lights. Known bug - may not work the first day
+
+* **Turn On/Off At**
+Just turn on (or off) switches at a specific time. There are better ways to do that now, but these were written in early 2013 and were some of my first apps.

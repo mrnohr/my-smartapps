@@ -15,8 +15,8 @@
  */
 
 /**
- * This handles a specific case where not everyone leaves, which is typically what triggers a phrase to
- * execute, but also execute it at specific time when only 1 person leaves.
+ * Use a virtual switch to control phrases. When the light turns on, execute the phrase. Then automatically turn
+ * off the light a few minutes later.
  */
 definition(
 		name: "Execute Phrase on Light On",

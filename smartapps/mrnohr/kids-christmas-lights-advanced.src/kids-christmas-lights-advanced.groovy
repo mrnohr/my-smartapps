@@ -13,16 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- 
- /**
- *  The kids like Christmas lights going in their room as they fall asleep during the holidays. This sets a
- *  timer to turn the lights off after a certain number of minutes. However, to keep the kids in bed, it also
- *  turns off the lights if the kids get up and open the door.
- * 
- *  This 'advanced' version uses a Minimote to turn on the lights and set the timer. The top-left button turns on the
- *  lights. The top-right (and bottom-right) turns them off. The bottom-right turns on the light and starts the timer.
- */
- 
 definition(
     name: "Kids Christmas Lights - Advanced",
     namespace: "mrnohr",
@@ -57,7 +47,7 @@ def updated() {
 }
 
 def initialize() {
-	log.debug "In initialize" 
+	log.debug "In initialize"
 	state.currentlyRunning = false
     // subscribe to the door only when the timer is running
     //subscribe(door1, "contact.open", openHandler)
@@ -85,10 +75,10 @@ def buttonHandler(evt){
 	def value = evt.value
     log.debug "buttonEvent: $evt.name = $evt.value ($evt.data)"
 	log.debug "button: $buttonNumber, value: $value"
-    
+
     def recentEvents = buttonDevice.eventsSince(new Date(now() - 2000)).findAll{it.value == evt.value && it.data == evt.data}
     log.debug "Found ${recentEvents.size()?:0} events in past 2 seconds"
-    
+
     if(recentEvents.size <= 1){
         handleButton(extractButtonNumber(buttonNumber), value)
     } else {
@@ -134,7 +124,7 @@ def handleButton(buttonNumber, value) {
             break
         default:
             log.debug "Unhandled command: $buttonNumber $value"
-           
+
     }
 }
 // timer methods
@@ -153,7 +143,6 @@ def stopTimer() {
 	state.currentlyRunning = false
     lights.off()
     unschedule("stopTimer")
-    
+
     sendPush("Turned off Christmas lights")
 }
-

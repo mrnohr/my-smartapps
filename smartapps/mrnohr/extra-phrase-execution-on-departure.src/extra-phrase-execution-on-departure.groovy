@@ -13,11 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-
-/**
- * This handles a specific case where not everyone leaves, which is typically what triggers a phrase to 
- * execute, but also execute it at specific time when only 1 person leaves.
- */
 definition(
 		name: "Extra Phrase Execution on Departure",
 		namespace: "mrnohr",

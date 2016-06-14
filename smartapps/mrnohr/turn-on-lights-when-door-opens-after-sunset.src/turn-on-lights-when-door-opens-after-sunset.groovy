@@ -13,12 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-
-/**
- * When a door opens after sunset, turn on some lights
- *
- * TODO: This doesn't work the first day
- */
 definition(
 		name: "Turn on Lights when Door Opens after Sunset",
 		namespace: "mrnohr",

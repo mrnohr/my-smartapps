@@ -13,10 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-/**
- * Just turn off some lights at a given time, or when tapped
- * Date: 2013-01-25
- */
 definition(
 		name: "Turn Off At",
 		namespace: "mrnohr",

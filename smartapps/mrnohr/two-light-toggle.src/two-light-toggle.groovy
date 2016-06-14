@@ -13,11 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-/**
- * Using one master switch and 1 other switch, cycle through which lights are on with each 'on' command from the master. This will
- * only work with physical switches that allow you to send multiple "on" commands even if the switch is already on. This is fairly
- * limiting and I haven't actually used this in years.
- */
 definition(
     name: "Two Light Toggle",
     namespace: "mrnohr",

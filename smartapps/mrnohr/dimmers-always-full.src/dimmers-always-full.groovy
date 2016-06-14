@@ -13,10 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- 
-/**
- * Any time a dimmeable light turns on or changes level, reset the level to 99
- */
 definition(
 		name: "Dimmers Always Full",
 		namespace: "mrnohr",

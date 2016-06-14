@@ -13,11 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- 
- /**
-  * When selling our house, this app was used to let us know when people were looking at our house, and how
-  * long they were there.
-  */
 definition(
     name: "House Showing Monitor",
     namespace: "mrnohr",
@@ -53,10 +48,10 @@ def installed() {
 
 def updated() {
 	log.debug "Updated with settings: ${settings}"
-	
+
 	unsubscribe()
 	initialize()
-    
+
     resetState(true)
 }
 
@@ -73,7 +68,7 @@ def contactHandler(evt) {
     	if(evt.value == 'closed' && (timePassed > milliThreshold)) {
         	//door closed after X minutes, must be done
 			endShowing()
-        } else {        
+        } else {
         	log.debug "In progress, door ${evt.value} - time $timePassed - threshold $milliThreshold"
         }
     } else {
@@ -87,7 +82,7 @@ def switchOffHanlder(evt) {
 	//This is used to overwrite/reset the state. For example, if I opened the door but a showing isn't happening.
     if(atomicState.inProgress == true) {
     	resetState(false)
-        
+
         def msg = "House showing reset"
         log.debug msg
         messageMe(msg)
@@ -98,7 +93,7 @@ def startShowing() {
 	state.inProgress = true
     state.startTime = now()
     light1.on()
-    
+
     def msg = "Starting house showing - door opened"
     log.debug msg
     messageMe(msg)

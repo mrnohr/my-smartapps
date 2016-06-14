@@ -13,9 +13,6 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- /**
-  * When the thermostat mode changes (from Cool to Off for example), send a notification.
-  */
 definition(
     name: "Thermostat Mode Change Reporter",
     namespace: "mrnohr",
@@ -52,7 +49,7 @@ def initialize() {
 // event handlers
 def thermostatEventHandler(evt) {
 	log.debug "thermostatEventHandler - $evt.name = $evt.value"
-    
+
     // since you need to cycle through, don't send message right away
     def secs = 5
     log.debug "will check the value in $secs secs and report if different"
@@ -62,7 +59,7 @@ def thermostatEventHandler(evt) {
 def sendNotification() {
 	def currentMode = thermostat.latestValue("thermostatMode")
     log.debug "in sendNotification, going to see if $currentMode == ${atomicState.lastMode}"
-    
+
     if(currentMode != atomicState.lastMode) {
     	def msg
     	if(currentMode == 'cool') {
@@ -78,9 +75,9 @@ def sendNotification() {
         } else {
         	msg = "The thermostat is in $currentMode mode"
         }
-        
+
         atomicState.lastMode = currentMode
-                
+
         log.info msg
         sendNotification(msg, [method:'push'])
     } else {

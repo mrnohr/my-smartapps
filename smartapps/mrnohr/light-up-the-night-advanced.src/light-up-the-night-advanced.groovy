@@ -39,6 +39,13 @@ preferences {
 	section("Do not flip back for this many minutes") {
 		input "flickerThreshold", "number", title: "Minutes (optional)", required: false
 	}
+    section("Notifications for fine tuning") {
+    	input "debugPush", "bool", title: "Send notifications for fine tuning?", defaultValue: false
+        input("recipients", "contact", title: "Send notifications to") {
+            input "phone", "phone", title: "Phone Number (for SMS, optional)", required: false
+            input "pushAndPhone", "enum", title: "Both Push and SMS?", required: false, options: ["Yes", "No"]
+        }
+    }
 }
 
 
@@ -67,10 +74,16 @@ def illuminanceHandler(evt) {
 			lights.on()
 			state.lastStatus = "on"
 			state.lastUpdateTime = now()
+            if(debugPush) {
+            	messageMe("Turning on lights because light is ${evt.integerValue}")
+            }
 		} else if(lastStatus != "off" && evt.integerValue > turnOffLux) {
 			lights.off()
 			state.lastStatus = "off"
 			state.lastUpdateTime = now()
+            if(debugPush) {
+            	messageMe("Turning off lights because light is ${evt.integerValue}")
+            }
 		}
 	}
 }
@@ -78,11 +91,17 @@ def illuminanceHandler(evt) {
 def turnOffAtNight() {
 	lights.off()
 	state.lastStatus = "off"
+    if(debugPush) {
+        messageMe("Turning off lights because it is time")
+    }
 }
 
 def turnOnnInMorning() {
 	lights.on()
 	state.lastStatus = "on"
+    if(debugPush) {
+        messageMe("Turning on lights because it is time")
+    }
 }
 
 private getTimeZoneNohr() {
@@ -110,4 +129,10 @@ private isOutsideFlickerThreshold() {
 		log.debug "Not outside flicker threshold"
 	}
 	outside
+}
+
+private messageMe(message) {
+	if(recipients) {
+		sendNotificationToContacts(message, recipients)
+	}
 }

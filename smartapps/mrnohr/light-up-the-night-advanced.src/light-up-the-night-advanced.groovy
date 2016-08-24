@@ -92,7 +92,7 @@ def turnOffAtNight() {
 	lights.off()
 	state.lastStatus = "off"
     if(debugPush) {
-        messageMe("Turning off lights because it is time")
+        //messageMe("Turning off lights because it is time")
     }
 }
 
@@ -100,7 +100,7 @@ def turnOnnInMorning() {
 	lights.on()
 	state.lastStatus = "on"
     if(debugPush) {
-        messageMe("Turning on lights because it is time")
+        //messageMe("Turning on lights because it is time")
     }
 }
 

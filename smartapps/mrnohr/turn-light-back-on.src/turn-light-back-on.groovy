@@ -18,7 +18,7 @@ definition(
     namespace: "mrnohr",
     author: "Matt Nohr",
     description: "When a light turns off, turn it back on",
-    category: "Family",
+    category: "My Apps",
     iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
     iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
     iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg")

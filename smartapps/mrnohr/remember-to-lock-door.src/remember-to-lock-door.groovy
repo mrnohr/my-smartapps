@@ -18,7 +18,7 @@ definition(
     namespace: "mrnohr",
     author: "Matt Nohr",
     description: "If certain doors open during the day, remind me at a certain time to to check it was locked.",
-    category: "Family",
+    category: "My Apps",
     iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/door%402x.jpg",
     iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/door%402x.jpg",
     iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/door%402x.jpg")

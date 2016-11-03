@@ -12,9 +12,9 @@ definition(
     author: "Matt Nohr",
     description: "How many times a night do the kids get up",
     category: "My Apps",
-    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bed%402x.png",
-    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bed%402x.png",
-    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bed%402x.png")
+    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/bed-1.png",
+    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/bed-1.png",
+    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/bed-1.png")
 
 preferences {
 	section("Doors") {

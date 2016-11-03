@@ -19,9 +19,9 @@ definition(
     author: "Matt Nohr",
     description: "make sure garage door is closed",
     category: "My Apps",
-    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/garage%402x.jpg",
-    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/garage%402x.jpg",
-    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/garage%402x.jpg")
+    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/garage.png",
+    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/garage.png",
+    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/garage.png")
 
 
 preferences {

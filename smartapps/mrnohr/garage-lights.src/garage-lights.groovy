@@ -19,9 +19,9 @@ definition(
 		author: "Matt Nohr",
 		description: "Using combo of contact and motion, determine when a garage is occupied and have lights on during that time.",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg")
+		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/light-bulb-3.png",
+		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/light-bulb-3.png",
+		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/light-bulb-3.png")
 
 
 preferences {

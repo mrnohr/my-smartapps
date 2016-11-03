@@ -19,8 +19,8 @@ definition(
 		author: "Matt Nohr",
 		description: "If the garage door is open, close it",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/garage%402x.jpg",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/garage%402x.jpg")
+		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/garage.png",
+		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/garage.png")
 
 preferences {
 	section("What Garage Door?") {

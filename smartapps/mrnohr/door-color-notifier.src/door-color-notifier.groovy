@@ -19,9 +19,9 @@ definition(
 		author: "Matt Nohr",
 		description: "Change a light to a certain color when a door opens",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg")
+		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lamp-4.png",
+		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lamp-4.png",
+		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lamp-4.png")
 
 
 preferences {

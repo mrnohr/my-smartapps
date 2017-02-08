@@ -36,8 +36,7 @@ preferences {
     }
     section("With these light levels...") {
     	input "lightSensor", "capability.illuminanceMeasurement", title: "Light sensor"
-		input "turnOnBrightness", "number", title: "Turn on under this lux"
-		input "turnOffBrightness", "number", title: "Turn off over this lux"
+		input "turnOnBrightness", "number", title: "Turn on under this lux (default 100)", required: false
     }
     section("Turn off during the day unless I'm in this mode...") {
     	mode name:"homeMode", title: "Which mode?"
@@ -51,6 +50,7 @@ preferences {
     }
 }
 
+// *********** Lifecycle methods
 def installed() {
 	log.debug "Installed with settings: ${settings}"
 
@@ -60,7 +60,7 @@ def installed() {
 def updated() {
 	log.debug "Updated with settings: ${settings}"
 
-	unsubscribe()
+	unschedule()
 	initialize()
 }
 
@@ -69,6 +69,135 @@ def initialize() {
     schedule("9 2/15 * * * ?", scheduleHandler)
 }
 
-def scheduleHandler() {
+// *********** Schedule methods
 
+def scheduleHandler() {
+	// control what notification is sent
+	boolean sendMessage = true
+	boolean isStateChange = false
+	def currentLux = lightSensor.currentValue("illuminance")
+	String logMessage = "Ran, No Change: lux $currentLux"
+
+	if(withinOuterTime()) {
+		if(isDarkEnough()) {
+			if(isHomeMode() || !withinInnerTime()) {
+				isStateChange = turnOn()
+				if(isStateChange) {
+					logMessage = "Dark enough ($currentLux), turned on lights"
+				}
+			} else {
+				isStateChange = turnOff()
+				if(isStateChange) {
+					logMessage = "Away ($currentLux), turned off lights"
+				}
+			}
+		} else {
+			isStateChange = turnOff()
+			if(isStateChange) {
+				logMessage = "Bright enough ($currentLux), turned off lights"
+			}
+		}
+	} else {
+		isStateChange = turnOff()
+		if(isStateChange) {
+			sendMessage = true
+			logMessage = "Outside of time window, turned off lights"
+		} else {
+			//prevent getting messages all night
+			sendMessage = false
+		}
+	}
+
+	log.trace "scheduleHandler: $logMessage (stateChange = $isStateChange, sendMessage = $sendMessage)"
+	if(sendMessage) {
+		messageMe(logMessage, isStateChange)
+	}
+}
+
+// *********** Light control methods
+
+boolean turnOn() {
+	boolean isStateChange = false
+	def currSwitches = lights.currentValue("switch")
+	def offSwitches = currSwitches.findAll { switchVal ->
+        switchVal == "off" ? true : false
+    }
+	if(offSwitches) {
+		lights.on()
+		isStateChange = true
+	}
+	log.trace "turnOn = $isStateChange"
+	return isStateChange
+}
+
+boolean turnOff() {
+	boolean isStateChange = false
+	def currSwitches = lights.currentValue("switch")
+	def onSwitches = currSwitches.findAll { switchVal ->
+        switchVal == "on" ? true : false
+    }
+	if(onSwitches) {
+		lights.off()
+		isStateChange = true
+	}
+	log.trace "turnOff = $isStateChange"
+	return isStateChange
+}
+
+// *********** Time methods
+
+private boolean withinOuterTime() {
+	def result = true
+	if (morningOn && eveningOff) {
+		def currTime = now()
+		def start = timeToday(morningOn, location?.timeZone).time
+		def stop = timeToday(eveningOff, location?.timeZone).time
+		result = start < stop ? currTime >= start && currTime <= stop : currTime <= stop || currTime >= start
+	}
+	log.trace "withinOuterTime = $result"
+	result
+}
+
+private boolean withinInnerTime() {
+	def result = true
+	if (midMorningOff && afternoonOn) {
+		def currTime = now()
+		def start = timeToday(midMorningOff, location?.timeZone).time
+		def stop = timeToday(afternoonOn, location?.timeZone).time
+		result = start < stop ? currTime >= start && currTime <= stop : currTime <= stop || currTime >= start
+	}
+	log.trace "withinInnerTime = $result"
+	result
+}
+
+// *********** Mode methods
+private boolean isHomeMode() {
+	boolean result = homeMode == location.mode
+	log.trace "isHomeMode = $result"
+	return result
+}
+
+// *********** Illuminance methods
+private boolean isDarkEnough() {
+	def turnOnLux = turnOnBrightness ?: 100
+	def currentLux = lightSensor.currentValue("illuminance")
+	boolean result = currentLux < turnOnLux
+	log.trace "isDarkEnough = $result"
+	return result
+}
+
+
+
+// *********** Notification methods
+private void messageMe(String message, boolean isStateChange) {
+	boolean sendMessage = false
+	if(debugLevel == "every") {
+		sendMessage = true;
+	} else if (debugLevel == "changes" && isStateChange) {
+		sendMessage = true;
+	}
+
+	if(sendMessage && recipients) {
+		sendNotificationToContacts("BL: $message", recipients)
+	}
 }

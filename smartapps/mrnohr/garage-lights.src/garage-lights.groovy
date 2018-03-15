@@ -26,7 +26,7 @@ definition(
 
 preferences {
 	section("Sensors") {
-    	input "garageDoor", "capability.contactSensor", title: "Garage Door"
+    	input "garageDoors", "capability.contactSensor", title: "Garage Door", multiple: true
 		input "door1", "capability.contactSensor", title: "Interior Door"
 		input "motion1", "capability.motionSensor", title: "Motion Sensor"
 	}
@@ -52,7 +52,7 @@ def updated() {
 }
 
 def initialize() {
-	subscribe(garageDoor, "contact", garageDoorHandler)
+	subscribe(garageDoors, "contact", garageDoorHandler)
 	subscribe(door1, "contact", interiorDoorHandler)
 	subscribe(motion1, "motion", motionHandler)
 }

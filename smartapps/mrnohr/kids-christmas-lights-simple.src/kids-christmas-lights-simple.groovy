@@ -25,9 +25,10 @@ definition(
 
 preferences {
 	section {
-		input "lights", "capability.switch", title: "Which lights?", multiple: true, required: true
+		input "lights", "capability.switch", title: "Which lights?", multiple: false, required: true
 		input "timeout", "number", title: "Timer length", required: true
 		input "door1", "capability.contactSensor", title: "Which door?", multiple: false, required: true
+        input "offWithDoor", "bool", title: "Turn off with door opening?"
 	}
 }
 
@@ -48,16 +49,26 @@ def updated() {
 def initialize() {
 	log.debug "In initialize"
 	state.currentlyRunning = false
-	log.debug "subscribing to door"
-	subscribe(door1, "contact.open", openHandler)
-	log.debug "subscribing to app touch event"
-	subscribe(app, appTouch)
+    
+	log.debug "subscribing to lights on event"
+    subscribe(lights, "switch.on", onHandler)
+    
+    log.debug "subscribing to door closing"
+    subscribe(door1, "contact.closed", closedHandler)
+    
+    if(offWithDoor) {
+		log.debug "subscribing to door opening"
+		subscribe(door1, "contact.open", openHandler)
+    }
 }
 
-// TODO: implement event handlers
-def appTouch(evt) {
-	log.debug "Staring the timer since you touched the app"
-	startTimer()
+// Event handlers
+def onHandler(evt) {
+	startIfNeeded()
+}
+
+def closedHandler(evt) {
+	startIfNeeded()
 }
 
 def openHandler(evt) {
@@ -69,20 +80,33 @@ def openHandler(evt) {
 	}
 }
 
-// helper methods
+// Helper Methods
+def startIfNeeded() {
+	if(!state.currentlyRunning) {
+    	if(door1.currentContact == "closed" && lights.currentSwitch == "on") {
+        	log.debug "Starting the timer since the door is closed and the lights are on"
+            startTimer()
+        }
+    }
+}
+
+// Timer methods
 def startTimer() {
 	log.debug "in start timer"
 	state.currentlyRunning = true
-	lights.on()
-	sendPush("Christmas lights will turn off in $timeout minutes")
-	runIn(60 * timeout, "stopTimer")
+
+    sendPush("${lights.displayName} will turn off in $timeout minutes")
+	
+    runIn(60 * timeout, "stopTimer")
 }
 
 def stopTimer() {
 	log.debug "in stop timer"
 	state.currentlyRunning = false
-	lights.off()
-	unschedule("stopTimer")
+	
+    lights.off()
+	
+    unschedule("stopTimer")
 
-	sendPush("Turned off Christmas lights")
+	sendPush("Turned off ${lights.displayName}")
 }

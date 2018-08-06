@@ -19,9 +19,9 @@ definition(
     author: "Matt Nohr",
     description: "Control the Color Bulbs",
     category: "My Apps",
-    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lamp-4.png",
-    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lamp-4.png",
-    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lamp-4.png")
+    iconUrl: "https://www.dropbox.com/s/2prjfzikcz0p88m/lamp-4.png?raw=1",
+    iconX2Url: "https://www.dropbox.com/s/2prjfzikcz0p88m/lamp-4.png?raw=1",
+    iconX3Url: "https://www.dropbox.com/s/2prjfzikcz0p88m/lamp-4.png?raw=1")
 
 
 preferences {

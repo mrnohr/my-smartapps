@@ -19,9 +19,9 @@ definition(
 		author: "matt",
 		description: "turn them off when appropiate",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/tree%402x.png",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/tree%402x.png",
-		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/tree%402x.png")
+		iconUrl: "https://www.dropbox.com/s/6yh38zxpd3c6gn7/light-bulb-9.png?raw=1",
+		iconX2Url: "https://www.dropbox.com/s/6yh38zxpd3c6gn7/light-bulb-9.png?raw=1",
+		iconX3Url: "https://www.dropbox.com/s/6yh38zxpd3c6gn7/light-bulb-9.png?raw=1")
 
 preferences {
 	section {

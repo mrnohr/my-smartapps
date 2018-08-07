@@ -19,9 +19,9 @@ definition(
 		author: "matt",
 		description: "Like the standard Light Up The Night app, but with start/end times and an optional lux configuration",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb.jpg",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg")
+		iconUrl: "https://www.dropbox.com/s/92tx2muwd0ptvt6/lights.png?raw=1",
+		iconX2Url: "https://www.dropbox.com/s/92tx2muwd0ptvt6/lights.png?raw=1",
+		iconX3Url: "https://www.dropbox.com/s/92tx2muwd0ptvt6/lights.png?raw=1")
 
 preferences {
 	section("Monitor the luminosity...") {

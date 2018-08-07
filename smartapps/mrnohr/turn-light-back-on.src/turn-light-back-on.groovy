@@ -19,9 +19,9 @@ definition(
     author: "Matt Nohr",
     description: "When a light turns off, turn it back on",
     category: "My Apps",
-    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg")
+    iconUrl: "https://www.dropbox.com/s/kd8keb0553nrnbz/light-bulb-1.png?raw=1",
+    iconX2Url: "https://www.dropbox.com/s/kd8keb0553nrnbz/light-bulb-1.png?raw=1",
+    iconX3Url: "https://www.dropbox.com/s/kd8keb0553nrnbz/light-bulb-1.png?raw=1")
 
 
 preferences {

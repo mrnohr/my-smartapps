@@ -14,40 +14,39 @@
  *
  */
 definition(
-    name: "Better Living Room Lights",
-    namespace: "mrnohr",
-    author: "Matt Nohr",
-    description: "Control the lights based on: illuminance, mode, and time",
-    category: "My Apps",
-    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lights.png",
-    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lights.png",
-    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/lights.png")
+	name: "Better Living Room Lights",
+	namespace: "mrnohr",
+	author: "Matt Nohr",
+	description: "Control the lights based on: illuminance, mode, and time",
+	category: "My Apps",
+	iconUrl: "https://www.dropbox.com/s/92tx2muwd0ptvt6/lights.png?raw=1",
+	iconX2Url: "https://www.dropbox.com/s/92tx2muwd0ptvt6/lights.png?raw=1",
+	iconX3Url: "https://www.dropbox.com/s/92tx2muwd0ptvt6/lights.png?raw=1")
 
 
 preferences {
 	section("Control these lights...") {
 		input "lights", "capability.switch", multiple: true
 	}
-    section("During these times...") {
-    	input "morningOn", "time", title: "Turn on at this time in the morning"
-        input "midMorningOff", "time", title: "Turn off at this time in the morning if nobody is home"
-        input "afternoonOn", "time", title: "Turn on at this time in the afternoon if nobody is home"
-        input "eveningOff", "time", title: "Turn off at this time at night"
-    }
-    section("With these light levels...") {
-    	input "lightSensor", "capability.illuminanceMeasurement", title: "Light sensor"
+
+	section("During these times...") {
+		paragraph "This will run at :02, :17, :32, and :47 each hour between 5:00am and 11:00pm. Plan accordingly."
+		input "morningOn", "time", title: "Turn on at this time in the morning"
+		input "midMorningOff", "time", title: "Turn off at this time in the morning if nobody is home"
+		input "afternoonOn", "time", title: "Turn on at this time in the afternoon if nobody is home"
+		input "eveningOff", "time", title: "Turn off at this time at night"
+	}
+	section("With these light levels...") {
+		input "lightSensor", "capability.illuminanceMeasurement", title: "Light sensor"
 		input "turnOnBrightness", "number", title: "Turn on under this lux (default 100)", required: false
-    }
-    section("Turn off during the day unless I'm in this mode...") {
-    	mode name:"homeMode", title: "Which mode?"
-    }
-    section("Notifications for fine tuning") {
-    	input "debugLevel", "enum", title: "Send notifications for fine tuning?", options: ["every":"Every Execution","changes":"Only On Change","none":"Never"]
-        input("recipients", "contact", title: "Send notifications to") {
-            input "phone", "phone", title: "Phone Number (for SMS, optional)", required: false
-            input "pushAndPhone", "enum", title: "Both Push and SMS?", required: false, options: ["Yes", "No"]
-        }
-    }
+	}
+	section("Notifications for fine tuning") {
+		input "debugLevel", "enum", title: "Send notifications for fine tuning?", options: ["every":"Every Execution","changes":"Only On Change","none":"Never"]
+		input("recipients", "contact", title: "Send notifications to") {
+			input "phone", "phone", title: "Phone Number (for SMS, optional)", required: false
+			input "pushAndPhone", "enum", title: "Both Push and SMS?", required: false, options: ["Yes", "No"]
+		}
+	}
 }
 
 // *********** Lifecycle methods
@@ -65,8 +64,10 @@ def updated() {
 }
 
 def initialize() {
-	//run every 15 minutes (2, 17, etc), in the 9th second
-    schedule("9 2/15 * * * ?", scheduleHandler)
+	// 9     9th second (random)
+	// 2/15  Every 15 minutes offset by 2 (2, 17, 32, 47)
+	// 5-23  Between the hours of 5:00 and 23:00
+	schedule("9 2/15 5-23 * * ?", scheduleHandler)
 }
 
 // *********** Schedule methods
@@ -80,7 +81,7 @@ def scheduleHandler() {
 
 	if(withinOuterTime()) {
 		if(isDarkEnough()) {
-			if(isHomeMode() || !withinInnerTime()) {
+			if(isCurrentlyHomeMode() || !withinInnerTime()) {
 				isStateChange = turnOn()
 				if(isStateChange) {
 					logMessage = "Dark enough ($currentLux), turned on lights"
@@ -120,8 +121,9 @@ boolean turnOn() {
 	boolean isStateChange = false
 	def currSwitches = lights.currentValue("switch")
 	def offSwitches = currSwitches.findAll { switchVal ->
-        switchVal == "off" ? true : false
-    }
+		switchVal == "off" ? true : false
+	}
+
 	if(offSwitches) {
 		lights.on()
 		isStateChange = true
@@ -134,8 +136,9 @@ boolean turnOff() {
 	boolean isStateChange = false
 	def currSwitches = lights.currentValue("switch")
 	def onSwitches = currSwitches.findAll { switchVal ->
-        switchVal == "on" ? true : false
-    }
+		switchVal == "on" ? true : false
+	}
+
 	if(onSwitches) {
 		lights.off()
 		isStateChange = true
@@ -171,8 +174,8 @@ private boolean withinInnerTime() {
 }
 
 // *********** Mode methods
-private boolean isHomeMode() {
-	boolean result = homeMode == location.mode
+private boolean isCurrentlyHomeMode() {
+	boolean result = ("Home" == location.mode)
 	log.trace "isHomeMode = $result"
 	return result
 }
@@ -186,8 +189,6 @@ private boolean isDarkEnough() {
 	return result
 }
 
-
-
 // *********** Notification methods
 private void messageMe(String message, boolean isStateChange) {
 	boolean sendMessage = false
@@ -198,6 +199,7 @@ private void messageMe(String message, boolean isStateChange) {
 	}
 
 	if(sendMessage && recipients) {
+		log.info message
 		sendNotificationToContacts("BL: $message", recipients)
 	}
 }

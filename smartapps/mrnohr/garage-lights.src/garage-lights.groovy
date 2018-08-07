@@ -19,14 +19,14 @@ definition(
 		author: "Matt Nohr",
 		description: "Using combo of contact and motion, determine when a garage is occupied and have lights on during that time.",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg",
-		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/bulb%402x.jpg")
+		iconUrl: "https://www.dropbox.com/s/hkqbk4smns2dczu/light-bulb-3.png?raw=1",
+		iconX2Url: "https://www.dropbox.com/s/hkqbk4smns2dczu/light-bulb-3.png?raw=1",
+		iconX3Url: "https://www.dropbox.com/s/hkqbk4smns2dczu/light-bulb-3.png?raw=1")
 
 
 preferences {
 	section("Sensors") {
-    	input "garageDoor", "capability.contactSensor", title: "Garage Door"
+    	input "garageDoors", "capability.contactSensor", title: "Garage Door", multiple: true
 		input "door1", "capability.contactSensor", title: "Interior Door"
 		input "motion1", "capability.motionSensor", title: "Motion Sensor"
 	}
@@ -52,7 +52,7 @@ def updated() {
 }
 
 def initialize() {
-	subscribe(garageDoor, "contact", garageDoorHandler)
+	subscribe(garageDoors, "contact", garageDoorHandler)
 	subscribe(door1, "contact", interiorDoorHandler)
 	subscribe(motion1, "motion", motionHandler)
 }

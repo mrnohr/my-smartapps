@@ -19,9 +19,9 @@ definition(
 		author: "Matt Nohr",
 		description: "Execute a phrase when leaving",
 		category: "My Apps",
-		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/home%402x.png",
-		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/home%402x.png",
-		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/home%402x.png")
+		iconUrl: "https://dl.dropboxusercontent.com/u/2256790/st-icons/house.png",
+		iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/house.png",
+		iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/st-icons/house.png")
 
 preferences {
 	page(name: "firstPage")

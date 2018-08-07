@@ -19,9 +19,9 @@ definition(
     author: "Matt Nohr",
     description: "If certain doors open during the day, remind me at a certain time to to check it was locked.",
     category: "My Apps",
-    iconUrl: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/door%402x.jpg",
-    iconX2Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/door%402x.jpg",
-    iconX3Url: "https://dl.dropboxusercontent.com/u/2256790/smartapp-icons/door%402x.jpg")
+    iconUrl: "https://www.dropbox.com/s/t5e3bjjzg0pkmxc/door.png?raw=1",
+    iconX2Url: "https://www.dropbox.com/s/t5e3bjjzg0pkmxc/door.png?raw=1",
+    iconX3Url: "https://www.dropbox.com/s/t5e3bjjzg0pkmxc/door.png?raw=1")
 
 
 preferences {

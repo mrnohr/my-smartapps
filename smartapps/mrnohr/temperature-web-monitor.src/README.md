@@ -1,0 +1,1 @@
+Monitor and group sets of temperature sensors in my house. Display the results on an HTML dashboard

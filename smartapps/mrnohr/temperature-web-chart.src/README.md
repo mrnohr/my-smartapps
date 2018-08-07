@@ -1,0 +1,1 @@
+Monitor a temperature sensor and display a graph using D3 when I hit a specific endpoint. Requires OAuth setup

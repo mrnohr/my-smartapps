@@ -47,6 +47,16 @@ mappings {
       		GET: "extraReading"
 		]
 	}
+    path("/storedaily") {
+    	action: [
+      		GET: "extraDaily"
+		]
+    }
+    path("/resetdaily") {
+    	action: [
+      		GET: "resetDaily"
+		]
+    }
 }
 
 // Lifecycle
@@ -65,23 +75,28 @@ def initialize() {
 	if(!state.temperatures){
     	state.temperatures = []
     }
-    if(!state.reset){
-    	state.temperatures = []
-    	state.reset = true
+    if(!state.daily) {
+    	state.daily = []
     }
     
+    //record the temp every 15 minutes
 	runEvery15Minutes(recordTemperatureSchedule)
+    
+    //store information once a day
+    def df = new java.text.SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+    df.setTimeZone(location.timeZone)
+    def scheduleTime = df.parse("2018-08-09 23:55:00")
+    schedule(scheduleTime, saveDailyInformation)
 }
 
-// Scheduled event
+// Scheduled events
 def recordTemperatureSchedule(){
 	//Get the current temperature
 	def currentTemperature = monitor1.currentState("temperature").integerValue
-    log.debug "Current temperature is $currentTemperature"
+    //log.debug "Current temperature is $currentTemperature"
 	if(currentTemperature instanceof List){
     	currentTemperature = currentTemperature[0]
     }
-    log.debug "Current temperature 2 is $currentTemperature"
     
     //Get the current time
     def df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm")
@@ -97,7 +112,25 @@ def recordTemperatureSchedule(){
     if(state.temperatures.size() > maxReadings) {
 		state.temperatures = state.temperatures.drop(state.temperatures.size() - maxReadings)
     }
-    log.debug "State temperatures = ${state.temperatures}"
+    //log.debug "State temperatures = ${state.temperatures}"
+}
+
+def saveDailyInformation() {
+	def df = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm")
+    df.setTimeZone(location.timeZone)
+    def formattedTime = df.format(new Date())
+    
+	def dailyInformation = [average: getAverageTemp(), high: getHighTemp(), low: getLowTemp(), date: formattedTime]
+    state.daily << dailyInformation
+    
+    //log.debug "Found this information: $dailyInformation"
+    //log.debug "Adding to state: ${state.daily}"
+    
+    //Drop old readings
+    int maxReadings = 20
+    if(state.daily.size() > maxReadings) {
+    	state.daily = state.daily.drop(state.daily.size() - maxReadings)
+    }
 }
 
 // Endpoints
@@ -108,6 +141,14 @@ def getGraph() {
 
 def extraReading() {
 	recordTemperatureSchedule()	
+}
+
+def extraDaily() {
+	saveDailyInformation()
+}
+
+def resetDaily() {
+	state.daily = []
 }
 
 // HTML
@@ -163,6 +204,19 @@ String buildStyle() {
             font-family: 'PT Sans Narrow', sans-serif;
             font-size: 32px;
         }
+        
+        .bigtable {
+        	margin-top: 80px;
+        	font-size: 32px;
+        }
+        .bigtable td {
+        	padding-right: 20px;
+            padding-bottom: 7px;
+        }
+        .bigtable table, th, td {
+       		border: 1px solid black;
+            border-collapse: collapse;
+        }
         """
 }
 
@@ -215,8 +269,8 @@ String buildBody() {
                     return d.time;
                 }));
             y.domain([
-            	68,
-                78
+            	70,
+                80
             ]);
 
             svg.append("path") // Add the valueline path.
@@ -231,15 +285,41 @@ String buildBody() {
                 .attr("class", "y axis")
                 .call(yAxis);
         </script>
-        
-        <h1>Current Temperature is: ${getCurrentTemp()}</h1>
-        <h1>Highest Temperature was: ${getHighTemp()}</h1>
-        <h1>Lowest Temperature was: ${getLowTemp()}</h1>
-        <h1>Average Temperature was: ${getAverageTemp()}</h1>
+
+        ${getDailyTable()}
     </body>
 
     </html>
     """
+}
+
+String getDailyTable() {
+	String table = """
+    <table class="bigtable bordertable">
+    <tr>
+    	<th>Date</th>
+        <th>Average</th>
+        <th>High</th>
+        <th>Low</th>
+    </tr>
+    <tr>
+    	<td>Current</td>
+        <td>${getAverageTemp()}</td>
+        <td>${getHighTemp()}</td>
+        <td>${getLowTemp()}</td>
+    </tr>
+    """
+    state.daily.reverseEach{nextDay ->
+    	table += """
+        <tr>
+        	<td>${nextDay.date}</td>
+            <td>${nextDay.average}</td>
+            <td>${nextDay.high}</td>
+            <td>${nextDay.low}</td>
+        </tr>
+        """
+    }
+    table += "</table>"
 }
 
 String getData() {
